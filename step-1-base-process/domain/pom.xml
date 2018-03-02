@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.itlibrium.cooldomain</groupId>
-    <artifactId>step-1-base-process</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>domain</artifactId>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
-     <modules>
-        <module>domain</module>
-        <module>app</module>
-        <module>adapters</module>
-    </modules>
+    <dependencies>
+       
+    </dependencies>
+
 </project>
