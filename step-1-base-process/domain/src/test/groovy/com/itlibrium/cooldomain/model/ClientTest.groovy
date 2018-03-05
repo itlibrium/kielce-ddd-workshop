@@ -1,14 +1,12 @@
-import com.itlibrium.cooldomain.model.Client
-import com.itlibrium.cooldomain.model.Guid
-import com.itlibrium.cooldomain.model.Money
-import com.itlibrium.cooldomain.model.PaymentType
+package com.itlibrium.cooldomain.model
+
 import spock.lang.Specification
 
 class ClientTest extends Specification {
 
-    private Money _deferredPaymentLimit;
-    private boolean _isVip;
-    private Boolean _isPaymentAccepted;
+    private Money _deferredPaymentLimit
+    private boolean _isVip
+    private Boolean _isPaymentAccepted
 
     def "Payment conditions are checked"() {
         given:

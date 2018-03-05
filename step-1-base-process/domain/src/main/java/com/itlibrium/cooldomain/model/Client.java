@@ -2,11 +2,11 @@ package com.itlibrium.cooldomain.model;
 
 public class Client
 {
-    public static Client Create(Money deferredPaymentLimit, boolean isVip) {
+    public static Client create(Money deferredPaymentLimit, boolean isVip) {
         return new Client(Guid.newGuid(), deferredPaymentLimit, isVip);
     }
 
-    public static Client Restore(Guid id, Money deferredPaymentLimit, boolean isVip) {
+    public static Client restore(Guid id, Money deferredPaymentLimit, boolean isVip) {
         return new Client(id, deferredPaymentLimit, isVip);
     }
 

@@ -20,7 +20,7 @@ public class ServiceOrder
         throw new UnsupportedOperationException();
     }
 
-    public static ServiceOrder Restore(Guid id, Guid clientId, ServiceOrderStatus status, Collection<ServiceAction> serviceActions) {
+    public static ServiceOrder restore(Guid id, Guid clientId, ServiceOrderStatus status, Collection<ServiceAction> serviceActions) {
         return new ServiceOrder(id, clientId, status, serviceActions);
     }
 
@@ -30,7 +30,7 @@ public class ServiceOrder
     }
 
 
-    public void AddServiceAction(ServiceAction serviceAction)
+    public void addServiceAction(ServiceAction serviceAction)
     {
         throw new UnsupportedOperationException();
     }

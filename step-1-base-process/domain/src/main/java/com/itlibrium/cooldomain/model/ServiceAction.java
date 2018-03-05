@@ -1,13 +1,13 @@
 package com.itlibrium.cooldomain.model;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.time.Duration;
 
-@Data
+@Value
 class ServiceAction
 {
-    private Guid typeId;
-    private Duration duration;
+    private final Guid typeId;
+    private final Duration duration;
 
 }
