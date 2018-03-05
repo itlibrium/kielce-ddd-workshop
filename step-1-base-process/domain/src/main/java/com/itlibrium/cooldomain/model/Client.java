@@ -1,18 +1,20 @@
 package com.itlibrium.cooldomain.model;
 
-public class Client
-{
+import lombok.Value;
+
+@Value
+public class Client {
+
+    private final Guid id;
+    private final Money deferredPaymentLimit;
+    private final boolean isVip;
+
     public static Client create(Money deferredPaymentLimit, boolean isVip) {
         return new Client(Guid.newGuid(), deferredPaymentLimit, isVip);
     }
 
     public static Client restore(Guid id, Money deferredPaymentLimit, boolean isVip) {
         return new Client(id, deferredPaymentLimit, isVip);
-    }
-
-    private Client (Guid id, Money deferredPaymentLimit, boolean isVip)
-    {
-        throw new UnsupportedOperationException();
     }
 
     public boolean canPay(Money requestedValue, PaymentType paymentType)

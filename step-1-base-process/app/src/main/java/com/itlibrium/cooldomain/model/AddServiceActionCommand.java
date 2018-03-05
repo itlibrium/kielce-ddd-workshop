@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 @Data
 public class AddServiceActionCommand
 {
-    private Guid serviceOrderId ;
-    private Guid typeId ;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private final Guid serviceOrderId ;
+    private final Guid typeId ;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
 
 }

@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class CloseServiceOrderCommand
 {
-    private Guid ServiceOrderId;
-    private int PaymentType;
+    private final Guid ServiceOrderId;
+    private final int PaymentType;
 }

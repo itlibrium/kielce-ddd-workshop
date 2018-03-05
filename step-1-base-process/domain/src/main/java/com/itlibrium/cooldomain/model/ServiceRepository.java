@@ -1,6 +1,10 @@
 package com.itlibrium.cooldomain.model;
 
+import java.util.Collection;
+
 public interface ServiceRepository
 {
-    void Save(Service service);
+
+    Collection<Service> getAll();
+    void save(Service service);
 }
