@@ -1,11 +1,14 @@
 package com.itlibrium.cooldomain.model;
 
 
+import lombok.Getter;
+
 public class Service
 {
-    private  Guid serviceOrderId;
+    private final Guid serviceOrderId;
 
-    public Money price;
+    @Getter
+    private Money price;
 
     public static Service create(Guid serviceOrderId, Money price) {
         return new Service(serviceOrderId, price);

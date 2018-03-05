@@ -1,10 +1,13 @@
 package com.itlibrium.cooldomain.model;
 
+import lombok.Getter;
+
 import java.util.Collection;
 
 public class ServiceOrder
 {
-    public Guid clientId;
+    @Getter
+    private Guid clientId;
 
     public static ServiceOrder openFor(Guid clientId)
     {
