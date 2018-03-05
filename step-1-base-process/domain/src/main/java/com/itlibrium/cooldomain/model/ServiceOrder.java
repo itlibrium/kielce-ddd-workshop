@@ -1,7 +1,5 @@
 ﻿package com.itlibrium.cooldomain.model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Collection;
 
 public class ServiceOrder
@@ -10,13 +8,13 @@ public class ServiceOrder
 
     public static ServiceOrder openFor(Guid clientId)
     {
-        return new ServiceOrder(clientId, ServiceOrderStatus.Open);
+        return new ServiceOrder(clientId, ServiceOrderStatus.OPEN);
     }
 
     private ServiceOrder(Guid clientId, ServiceOrderStatus status)
     {
         this.clientId = clientId;
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public static ServiceOrder Restore(Guid id, Guid clientId, ServiceOrderStatus status, Collection<ServiceAction> serviceActions) {
@@ -25,22 +23,22 @@ public class ServiceOrder
 
     private ServiceOrder(Guid id, Guid clientId, ServiceOrderStatus status, Collection<ServiceAction> serviceActions) {
         this.clientId = clientId;
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 
     public void AddServiceAction(ServiceAction serviceAction)
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public Collection<ServiceAction> GetServiceActions()
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public void Close()
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }

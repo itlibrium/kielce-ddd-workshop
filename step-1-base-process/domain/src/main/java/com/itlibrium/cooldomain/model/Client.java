@@ -1,7 +1,5 @@
 ﻿package com.itlibrium.cooldomain.model;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class Client
 {
     public static Client Create(Money deferredPaymentLimit, boolean isVip) {
@@ -14,12 +12,12 @@ public class Client
 
     private Client (Guid id, Money deferredPaymentLimit, boolean isVip)
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public boolean canPay(Money requestedValue, PaymentType paymentType)
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     //Przypisywanie limitu płatności odroczonych
