@@ -1,9 +1,11 @@
 ﻿package com.itlibrium.cooldomain.model;
 
+import lombok.Data;
+
 import java.time.Duration;
 
-//TODO use lombok
-public class ServiceAction
+@Data
+class ServiceAction
 {
     private Guid typeId;
     private Duration duration;
