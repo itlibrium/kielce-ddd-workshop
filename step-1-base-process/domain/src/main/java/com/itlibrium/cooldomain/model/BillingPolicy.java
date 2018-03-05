@@ -1,4 +1,4 @@
-﻿package com.itlibrium.cooldomain.model;
+package com.itlibrium.cooldomain.model;
 
 import java.util.Collection;
 

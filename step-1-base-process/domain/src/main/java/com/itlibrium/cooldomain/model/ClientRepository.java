@@ -1,4 +1,4 @@
-﻿package com.itlibrium.cooldomain.model;
+package com.itlibrium.cooldomain.model;
 
 public interface ClientRepository
     {
