@@ -12,9 +12,12 @@ class AppTests extends Specification {
     private final ServiceActionRepository _serviceActionRepository = Mock()
     private final ClientRepository _clientRepository = Mock()
 
+    private final LabourCostPolicy labourCostPolicy = new LabourCostPolicy(_serviceActionRepository)
+    private final BillingPolicy singleServicePolicy = new SingleServicePolicy(labourCostPolicy)
     private final OpenServiceOrderHandler _openServiceOrderHandler = new OpenServiceOrderHandler(_serviceOrderRepository)
     private final AddServiceActionHandler _addServiceActionHandler = new AddServiceActionHandler(_serviceOrderRepository)
-    private final CloseServiceOrderHandler _closeServiceOrderHandler = new CloseServiceOrderHandler()
+    private final CloseServiceOrderHandler _closeServiceOrderHandler =
+            new CloseServiceOrderHandler(_serviceOrderRepository, _clientRepository, _serviceRepository, singleServicePolicy)
 
     private final LocalDateTime _now = LocalDateTime.of(2017, 1, 30, 15, 0, 0)
 
