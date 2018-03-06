@@ -7,13 +7,13 @@ import java.time.LocalDateTime
 
 class AppTests extends Specification {
 
-    private final ServiceOrderRepository _serviceOrderRepository = Mock()
+    private final ServiceOrderRepository _serviceOrderRepository = new ServiceOrderTestRepo()
     private final ServiceRepository _serviceRepository = Mock()
     private final ServiceActionRepository _serviceActionRepository = Mock()
     private final ClientRepository _clientRepository = Mock()
 
-    private final OpenServiceOrderHandler _openServiceOrderHandler = new OpenServiceOrderHandler()
-    private final AddServiceActionHandler _addServiceActionHandler = new AddServiceActionHandler()
+    private final OpenServiceOrderHandler _openServiceOrderHandler = new OpenServiceOrderHandler(_serviceOrderRepository)
+    private final AddServiceActionHandler _addServiceActionHandler = new AddServiceActionHandler(_serviceOrderRepository)
     private final CloseServiceOrderHandler _closeServiceOrderHandler = new CloseServiceOrderHandler()
 
     private final LocalDateTime _now = LocalDateTime.of(2017, 1, 30, 15, 0, 0)
@@ -118,6 +118,22 @@ class AppTests extends Specification {
         Collection<Service> services = _serviceRepository.getAll()
         services.size() == 1
         services[0].getPrice() == Money.fromDouble(SERVICE_PRICE)
+    }
+
+
+    private class ServiceOrderTestRepo implements ServiceOrderRepository {
+
+        Map<Guid, ServiceOrder> store = new HashMap<>()
+
+        @Override
+        ServiceOrder GetById(Guid serviceOrderId) {
+            return store.get(serviceOrderId);
+        }
+
+        @Override
+        void Save(ServiceOrder serviceOrder) {
+            store.put(serviceOrder.getId(), serviceOrder);
+        }
     }
 
 }
