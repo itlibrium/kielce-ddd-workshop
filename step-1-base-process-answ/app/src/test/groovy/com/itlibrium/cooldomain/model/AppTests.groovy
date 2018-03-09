@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 class AppTests extends Specification {
 
     private final ServiceOrderRepository _serviceOrderRepository = new ServiceOrderTestRepo()
-    private final ServiceRepository _serviceRepository = Mock()
+    private final ServiceRepository _serviceRepository =  new ServiceTestRepo()
     private final ServiceActionRepository _serviceActionRepository = Mock()
     private final ClientRepository _clientRepository = Mock()
 
@@ -21,12 +21,12 @@ class AppTests extends Specification {
 
     private final LocalDateTime _now = LocalDateTime.of(2017, 1, 30, 15, 0, 0)
 
-    private static final int PRICE_PER_HOUR = 100
-    private static final int SERVICE_PRICE = 150
+    private static final Money PRICE_PER_HOUR = Money.fromDouble(100)
+    private static final Money SERVICE_PRICE = Money.fromDouble(150)
     private static final CLIENT = Client.create(Money.ZERO, false)
 
-    private final Guid _serviceActionTypeId = new Guid("B90A7F71-AE0A-425D-9A7D-D1D2F47D1BF5")
-
+    def NOON = LocalDateTime.of(2017, 1, 30, 12, 0, 0)
+    def ONE_PM = LocalDateTime.of(2017, 1, 30, 13, 0, 0)
 
     private Guid _serviceOrderId
     private PaymentType _paymentType = PaymentType.IMMEDIATE
@@ -77,23 +77,23 @@ class AppTests extends Specification {
 
     private void TwoServiceActionsForWhichClientCanPay()
     {
-        CreateServiceAction(LocalDateTime.of(2017, 1, 30, 12, 0, 0), 1)
-        CreateServiceAction(LocalDateTime.of(2017, 1, 30, 13, 0, 0), 0.5)
+        CreateServiceAction(NOON, 1, new Guid("A") )
+        CreateServiceAction(ONE_PM, 0.5, new Guid("B"))
         _paymentType = PaymentType.IMMEDIATE
     }
 
     private void OneServiceActionsForWhichClientCanNotPay()
     {
-        CreateServiceAction(LocalDateTime.of(2017, 1, 30, 12, 0, 0), 1)
+        CreateServiceAction(NOON, 1, new Guid("A"))
         _paymentType = PaymentType.DEFERRED
     }
 
-    private void CreateServiceAction(LocalDateTime start, double durationInHours)
+    private void CreateServiceAction(LocalDateTime start, double durationInHours, Guid typeId)
     {
         _addServiceActionHandler
                 .handle(new AddServiceActionCommand(
                 _serviceOrderId,
-                _serviceActionTypeId,
+                typeId,
                 start,
                 start.plusHours((int)(60 * durationInHours))))
     }
@@ -109,18 +109,21 @@ class AppTests extends Specification {
         serviceOrder.addServiceAction(new ServiceAction(Guid.newGuid(), Duration.ZERO))
     }
 
-    private void ServiceOrderIsClosed()
-    {
-        ServiceOrder serviceOrder = _serviceOrderRepository.GetById(_serviceOrderId)
-        serviceOrder.addServiceAction(new ServiceAction(Guid.newGuid(), Duration.ZERO))
-        //thrown BusinessException
+    private boolean ServiceOrderIsClosed() {
+        try {
+            ServiceOrder serviceOrder = _serviceOrderRepository.GetById(_serviceOrderId)
+            serviceOrder.addServiceAction(new ServiceAction(Guid.newGuid(), Duration.ZERO))
+        } catch (BusinessException e) {
+            return true
+        }
+        return false
     }
 
     private void OneServiceIsPresentInSystem()
     {
         Collection<Service> services = _serviceRepository.getAll()
         services.size() == 1
-        services[0].getPrice() == Money.fromDouble(SERVICE_PRICE)
+        services[0].getPrice() == SERVICE_PRICE
     }
 
 
@@ -136,6 +139,21 @@ class AppTests extends Specification {
         @Override
         void Save(ServiceOrder serviceOrder) {
             store.put(serviceOrder.getId(), serviceOrder);
+        }
+    }
+
+    private class ServiceTestRepo implements ServiceRepository {
+
+        Map<Guid, Service> store = new HashMap<>()
+
+        @Override
+        Collection<Service> getAll() {
+            return store.values()
+        }
+
+        @Override
+        void save(Service service) {
+            store.put(service.getId(), service)
         }
     }
 

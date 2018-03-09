@@ -5,7 +5,11 @@ import lombok.Getter;
 
 public class Service
 {
+
     private final Guid serviceOrderId;
+
+    @Getter
+    private final Guid id;
 
     @Getter
     private Money price;
@@ -16,6 +20,7 @@ public class Service
 
     private Service(Guid serviceOrderId, Money price)
     {
+        this.id = Guid.newGuid();
         this.serviceOrderId = serviceOrderId;
         this.price = price;
     }
@@ -26,6 +31,7 @@ public class Service
 
     private Service(Guid id, Guid serviceOrderId, Money price)
     {
+        this.id = Guid.newGuid();
         this.serviceOrderId = serviceOrderId;
         this.price = price;
     }
