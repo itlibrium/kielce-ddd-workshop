@@ -10,7 +10,7 @@ class AppTests extends Specification {
     private final ServiceOrderRepository _serviceOrderRepository = new ServiceOrderTestRepo()
     private final ServiceRepository _serviceRepository =  new ServiceTestRepo()
     private final ServiceActionRepository _serviceActionRepository = Mock()
-    private final ClientRepository _clientRepository = Mock()
+    private final ClientRepository _clientRepository = Mock();
 
     private final LabourCostPolicy labourCostPolicy = new LabourCostPolicy(_serviceActionRepository)
     private final BillingPolicy singleServicePolicy = new SingleServicePolicy(labourCostPolicy)
@@ -22,7 +22,7 @@ class AppTests extends Specification {
     private final LocalDateTime _now = LocalDateTime.of(2017, 1, 30, 15, 0, 0)
 
     private static final Money PRICE_PER_HOUR = Money.fromDouble(100)
-    private static final Money SERVICE_PRICE = Money.fromDouble(150)
+    private static final Money TOTAL_PRICE = Money.fromDouble(150)
     private static final CLIENT = Client.create(Money.ZERO, false)
 
     def NOON = LocalDateTime.of(2017, 1, 30, 12, 0, 0)
@@ -61,14 +61,18 @@ class AppTests extends Specification {
         given:
             OpenServiceOrder()
             TwoServiceActionsForWhichClientCanPay()
+            BillingPreferences(billingPolicy)
         when:
             CloseServiceOrder()
         then:
             ServiceOrderIsClosed()
-            OneServiceIsPresentInSystem()
+            ServiceCountIs(servicesCount)
+        where:
+            billingPolicy                                   | servicesCount
+            BillingPreferences.SINGLE_SERVICE               |      1
+            BillingPreferences.SERVICE_PER_SERVICE_ACTION   |      2
+
     }
-
-
 
     private void OpenServiceOrder()
     {
@@ -88,6 +92,10 @@ class AppTests extends Specification {
         _paymentType = PaymentType.DEFERRED
     }
 
+    private void BillingPreferences(BillingPreferences billingPreferences) {
+        _clientRepository.getBillingPreferences(_) >> billingPreferences
+    }
+
     private void CreateServiceAction(LocalDateTime start, double durationInHours, Guid typeId)
     {
         _addServiceActionHandler
@@ -103,6 +111,7 @@ class AppTests extends Specification {
         _closeServiceOrderHandler.handle(new CloseServiceOrderCommand(_serviceOrderId, _paymentType.ordinal()))
     }
 
+    //No exception means true
     private void NewOpenServiceOrderCanByFoundById()
     {
         ServiceOrder serviceOrder = _serviceOrderRepository.GetById(_serviceOrderId)
@@ -119,11 +128,17 @@ class AppTests extends Specification {
         return false
     }
 
-    private void OneServiceIsPresentInSystem()
+    private boolean OneServiceIsPresentInSystem()
     {
         Collection<Service> services = _serviceRepository.getAll()
         services.size() == 1
-        services[0].getPrice() == SERVICE_PRICE
+        services[0].getPrice() == TOTAL_PRICE
+    }
+
+    private boolean ServiceCountIs(int count)
+    {
+        Collection<Service> services = _serviceRepository.getAll()
+        services.size() == count
     }
 
 
@@ -156,5 +171,6 @@ class AppTests extends Specification {
             store.put(service.getId(), service)
         }
     }
+
 
 }
