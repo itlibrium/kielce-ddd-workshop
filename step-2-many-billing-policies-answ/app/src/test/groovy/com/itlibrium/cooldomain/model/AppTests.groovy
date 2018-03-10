@@ -10,14 +10,14 @@ class AppTests extends Specification {
     private final ServiceOrderRepository _serviceOrderRepository = new ServiceOrderTestRepo()
     private final ServiceRepository _serviceRepository =  new ServiceTestRepo()
     private final ServiceActionRepository _serviceActionRepository = Mock()
-    private final ClientRepository _clientRepository = Mock();
+    private final ClientRepository _clientRepository = Mock()
 
     private final LabourCostPolicy labourCostPolicy = new LabourCostPolicy(_serviceActionRepository)
-    private final BillingPolicy singleServicePolicy = new SingleServicePolicy(labourCostPolicy)
+    private final BillingPoliciesFactory _billingPoliciesFactory = new BillingPoliciesFactoryImpl(_clientRepository, labourCostPolicy);
     private final OpenServiceOrderHandler _openServiceOrderHandler = new OpenServiceOrderHandler(_serviceOrderRepository)
     private final AddServiceActionHandler _addServiceActionHandler = new AddServiceActionHandler(_serviceOrderRepository)
     private final CloseServiceOrderHandler _closeServiceOrderHandler =
-            new CloseServiceOrderHandler(_serviceOrderRepository, _clientRepository, _serviceRepository, singleServicePolicy)
+            new CloseServiceOrderHandler(_serviceOrderRepository, _clientRepository, _serviceRepository, _billingPoliciesFactory)
 
     private final LocalDateTime _now = LocalDateTime.of(2017, 1, 30, 15, 0, 0)
 
@@ -50,6 +50,7 @@ class AppTests extends Specification {
         given:
             OpenServiceOrder()
             OneServiceActionsForWhichClientCanNotPay()
+            BillingPreferences(BillingPreferences.SINGLE_SERVICE)
         when:
             CloseServiceOrder()
         then:
@@ -61,14 +62,14 @@ class AppTests extends Specification {
         given:
             OpenServiceOrder()
             TwoServiceActionsForWhichClientCanPay()
-            BillingPreferences(billingPrefernces)
+            BillingPreferences(billingPreferences)
         when:
             CloseServiceOrder()
         then:
             ServiceOrderIsClosed()
             ServiceCountIs(servicesCount)
         where:
-            billingPrefernces                             | servicesCount
+            billingPreferences                            | servicesCount
             BillingPreferences.SINGLE_SERVICE             |      1
             BillingPreferences.SERVICE_PER_SERVICE_ACTION |      2
 

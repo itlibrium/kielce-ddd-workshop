@@ -3,6 +3,7 @@ package com.itlibrium.cooldomain.model;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Random;
 
 @Data
 public class Guid {
