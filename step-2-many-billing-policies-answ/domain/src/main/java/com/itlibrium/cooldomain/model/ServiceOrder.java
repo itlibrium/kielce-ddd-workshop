@@ -15,7 +15,6 @@ public class ServiceOrder
     @Getter
     private final Guid clientId;
 
-    @Getter
     private Map<Guid, ServiceAction> serviceActionsMap = new HashMap<>();
 
     private ServiceOrderStatus status;
